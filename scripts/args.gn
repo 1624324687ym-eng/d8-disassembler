@@ -21,4 +21,7 @@ v8_enable_javascript_promise_hooks = true
 v8_enable_snapshot_native_code_counters = false
 v8_enable_private_mapping_fork_optimization = true
 
+# Producer build (jsc RO checksum 0xe8adc8e4, 33+ RO pages) has no static roots
+v8_enable_static_roots = false
+
 treat_warnings_as_errors = false
