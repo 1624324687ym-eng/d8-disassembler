@@ -15,13 +15,20 @@ void Shell::LoadBytecode(const v8::FunctionCallbackInfo<v8::Value>& info) {
         return;
     }
 
-    int length = 0;
-    std::unique_ptr<char[]> raw_filedata(ReadChars(*filename, &length));
-    if (raw_filedata == nullptr) {
+    // Version-agnostic file reading (Shell::ReadChars signature changed in V8 15)
+    FILE* fp = fopen(*filename, "rb");
+    if (!fp) {
         isolate->ThrowException(v8::Exception::Error(
             v8::String::NewFromUtf8(isolate, "Error reading file.").ToLocalChecked()));
         return;
     }
+    fseek(fp, 0, SEEK_END);
+    long fsize = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    std::unique_ptr<char[]> raw_filedata(new char[fsize]);
+    size_t fsize_read = fread(raw_filedata.get(), 1, fsize, fp);
+    fclose(fp);
+    int length = static_cast<int>(fsize_read);
 
     auto filedata = reinterpret_cast<uint8_t*>(raw_filedata.get());
     v8::internal::AlignedCachedData cached_data(filedata, length);
