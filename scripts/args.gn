@@ -14,4 +14,11 @@ v8_enable_pointer_compression = true
 v8_enable_pointer_compression_shared_cage = true
 v8_enable_external_code_space = true
 
+# Match Electron 43.4.1's V8 build args (build/args/all.gn) so object
+# layouts and read-only static-root addresses match the producer build
+v8_promise_internal_field_count = 1
+v8_enable_javascript_promise_hooks = true
+v8_enable_snapshot_native_code_counters = false
+v8_enable_private_mapping_fork_optimization = true
+
 treat_warnings_as_errors = false
