@@ -37,6 +37,10 @@ void Shell::LoadBytecode(const v8::FunctionCallbackInfo<v8::Value>& info) {
         .ToHandleChecked();
     v8::internal::ScriptDetails script_details;
 
+    setvbuf(stdout, nullptr, _IONBF, 0);
     printf("===== START DESERIALIZE BYTECODE =====\n");
+    fflush(stdout);
     v8::internal::CodeSerializer::Deserialize(isolateInternal, &cached_data, source, script_details);
+    printf("===== DONE DESERIALIZE BYTECODE =====\n");
+    fflush(stdout);
 }
